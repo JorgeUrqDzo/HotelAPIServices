@@ -2,10 +2,10 @@
 {
     public class RolesIdentifiers
     {
-        const string Admin = "Admin";
-        const string Worker = "Worker";
-        const string WorkerRead = "WorkerRead";
-        const string User = "User";
+        public const string Admin = "Admin";
+        public const string Worker = "Worker";
+        public const string WorkerRead = "WorkerRead";
+        public const string User = "User";
 
 
         public static bool IsAdmin(Role role)
