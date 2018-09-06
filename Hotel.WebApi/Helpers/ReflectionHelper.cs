@@ -21,10 +21,7 @@ namespace Hotel.WebApi.Helpers
                 });
 
             // write property names
-            foreach (PropertyInfo propertyInfo in propertyInfos)
-            {
-                Console.WriteLine(propertyInfo.Name);
-            }
+            foreach (var propertyInfo in propertyInfos) Console.WriteLine(propertyInfo.Name);
         }
 
         public static string GetFriendlyNames<T>()
@@ -33,7 +30,7 @@ namespace Hotel.WebApi.Helpers
                 s.CustomAttributes.Any(d => d.AttributeType == typeof(DisplayNameAttribute)));
 
             // write property names
-            foreach (PropertyInfo propertyInfo in propertyInfos)
+            foreach (var propertyInfo in propertyInfos)
             {
                 var atribute =
                     propertyInfo.CustomAttributes.FirstOrDefault(s => s.AttributeType == typeof(DisplayNameAttribute));

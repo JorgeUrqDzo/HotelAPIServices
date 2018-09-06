@@ -2,11 +2,11 @@
 {
     public class ApiResponse
     {
-        public string Message { get; }
-
         public ApiResponse(string message)
         {
             Message = message;
         }
+
+        public string Message { get; }
     }
 }

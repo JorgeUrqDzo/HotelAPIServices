@@ -6,14 +6,14 @@ namespace Hotel.Services.Helpers
 {
     internal class PasswordComplexityValidator
     {
-        UserAccountSettings Settings { get; set; }
-        string Password { get; set; }
-
         public PasswordComplexityValidator(UserAccountSettings userAccountSettings, string password)
         {
             Settings = userAccountSettings;
             Password = password;
         }
+
+        private UserAccountSettings Settings { get; }
+        private string Password { get; }
 
         public bool IsValid()
         {
@@ -31,12 +31,9 @@ namespace Hotel.Services.Helpers
 
         private bool CheckSpecialChars()
         {
-            if (Settings.NumberOfSpecialChars == 0)
-            {
-                return true;
-            }
+            if (Settings.NumberOfSpecialChars == 0) return true;
 
-            string pattern = @"[ !""#$%&'() * +,\-.\/\\:;<=>?@[\]^_`{|}~]";
+            var pattern = @"[ !""#$%&'() * +,\-.\/\\:;<=>?@[\]^_`{|}~]";
 
             var regex = new Regex(pattern);
             var matches = regex.Matches(Password);

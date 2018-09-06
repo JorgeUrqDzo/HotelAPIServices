@@ -7,7 +7,6 @@ namespace Hotel.Services.Exceptions
         public AuthenticationFailedException(string message)
             : base(message)
         {
-
         }
     }
 }

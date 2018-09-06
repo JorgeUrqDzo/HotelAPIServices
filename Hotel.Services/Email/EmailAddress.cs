@@ -2,9 +2,6 @@
 {
     public class EmailAddress
     {
-        public string Name { get; set; }
-        public string Address { get; set; }
-
         public EmailAddress()
         {
         }
@@ -19,5 +16,8 @@
             Name = name;
             Address = address;
         }
+
+        public string Name { get; set; }
+        public string Address { get; set; }
     }
 }

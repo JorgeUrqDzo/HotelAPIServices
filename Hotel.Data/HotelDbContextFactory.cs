@@ -11,7 +11,7 @@ namespace Hotel.Data
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", false, true)
                 .Build();
 
             var builder = new DbContextOptionsBuilder<HotelDbContext>();

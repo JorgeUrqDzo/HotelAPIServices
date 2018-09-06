@@ -6,12 +6,12 @@ namespace Hotel.Services.Email
 {
     public class EmailService : IEmailService
     {
-        public IEmailConfiguration EmailConfiguration { get; private set; }
-
         public EmailService(IEmailConfiguration configuration)
         {
             EmailConfiguration = configuration;
         }
+
+        public IEmailConfiguration EmailConfiguration { get; }
 
         public void Send(EmailMessage message)
         {
@@ -38,20 +38,14 @@ namespace Hotel.Services.Email
                 EnableSsl = EmailConfiguration.UseSsl
             };
 
-            if (EmailConfiguration.Port.HasValue)
-            {
-                smtpClient.Port = EmailConfiguration.Port.Value;
-            }
+            if (EmailConfiguration.Port.HasValue) smtpClient.Port = EmailConfiguration.Port.Value;
 
             smtpClient.Send(mailMessage);
         }
 
         public void Send(IEmailTemplate emailTemplate)
         {
-            if (emailTemplate == null)
-            {
-                throw new ArgumentNullException("emailTemplate");
-            }
+            if (emailTemplate == null) throw new ArgumentNullException("emailTemplate");
 
             Send(emailTemplate.BuildMessage());
         }

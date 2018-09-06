@@ -9,12 +9,12 @@ namespace Hotel.WebApi.Filters
 {
     public class ExceptionHandlingFilter : IExceptionFilter
     {
-        IEventLog EventLog { get; }
-
         public ExceptionHandlingFilter(IEventLog eventLog)
         {
             EventLog = eventLog;
         }
+
+        private IEventLog EventLog { get; }
 
         public void OnException(ExceptionContext context)
         {
@@ -24,7 +24,7 @@ namespace Hotel.WebApi.Filters
             {
                 context.ExceptionHandled = true;
 
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                context.HttpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
                 context.Result = new JsonResult(new ErrorResponse());
             }
         }

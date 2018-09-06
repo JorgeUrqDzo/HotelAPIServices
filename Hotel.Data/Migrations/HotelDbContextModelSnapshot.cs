@@ -19,6 +19,129 @@ namespace Hotel.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Hotel.Entities.ApplicationEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Controller")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("EventDate");
+
+                    b.Property<string>("EventType")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<Guid?>("InstanceId");
+
+                    b.Property<string>("Message")
+                        .IsRequired();
+
+                    b.Property<string>("ServerName")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<string>("StackTrace");
+
+                    b.Property<string>("UserIPAddress")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<Guid?>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ApplicationEvents");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.ApplicationSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedDate");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<Guid?>("UpdatedBy");
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Type", "Name");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("UpdatedBy");
+
+                    b.ToTable("ApplicationSettings");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Disabled");
+
+                    b.Property<string>("EndPoint")
+                        .IsRequired();
+
+                    b.Property<string>("Icon");
+
+                    b.Property<int>("Index");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<bool>("Optional");
+
+                    b.Property<Guid?>("ParentId");
+
+                    b.Property<string>("State")
+                        .IsRequired();
+
+                    b.Property<string>("Tooltip");
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Menus");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.MenuRole", b =>
+                {
+                    b.Property<Guid>("MenuId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.HasKey("MenuId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("MenuRoles");
+                });
+
             modelBuilder.Entity("Hotel.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -48,7 +171,7 @@ namespace Hotel.Data.Migrations
 
                     b.Property<Guid?>("ActivationToken");
 
-                    b.Property<Guid>("CreatedBy");
+                    b.Property<Guid?>("CreatedBy");
 
                     b.Property<DateTime>("CreatedDate");
 
@@ -89,7 +212,7 @@ namespace Hotel.Data.Migrations
 
                     b.Property<Guid>("RoleId");
 
-                    b.Property<Guid>("UpdatedBy");
+                    b.Property<Guid?>("UpdatedBy");
 
                     b.Property<DateTime>("UpdatedDate");
 
@@ -108,6 +231,66 @@ namespace Hotel.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Hotel.Entities.UserPasswordHistoryEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<DateTime>("UpdatedDate");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPasswordHistory");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.ApplicationEvent", b =>
+                {
+                    b.HasOne("Hotel.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.ApplicationSetting", b =>
+                {
+                    b.HasOne("Hotel.Entities.User")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Hotel.Entities.User")
+                        .WithMany()
+                        .HasForeignKey("UpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Hotel.Entities.Menu", b =>
+                {
+                    b.HasOne("Hotel.Entities.Menu", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("Hotel.Entities.MenuRole", b =>
+                {
+                    b.HasOne("Hotel.Entities.Menu", "Menu")
+                        .WithMany("Permissions")
+                        .HasForeignKey("MenuId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Hotel.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Hotel.Entities.User", b =>
                 {
                     b.HasOne("Hotel.Entities.User")
@@ -123,6 +306,14 @@ namespace Hotel.Data.Migrations
                     b.HasOne("Hotel.Entities.User")
                         .WithMany()
                         .HasForeignKey("UpdatedBy")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("Hotel.Entities.UserPasswordHistoryEntry", b =>
+                {
+                    b.HasOne("Hotel.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618

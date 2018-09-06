@@ -7,20 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace Hotel.WebApi
 {
     [Authorize(Policy = "PIPolicy")]
-    [TokenUpdateFilter()]
+    [TokenUpdateFilter]
     public class BaseController : Controller
     {
-        private Guid userId;
         private Guid instanceId;
+        private Guid userId;
 
         public Guid UserID
         {
             get
             {
-                if (userId == Guid.Empty)
-                {
-                    userId = Guid.Parse(User.FindFirst("UserId")?.Value);
-                }
+                if (userId == Guid.Empty) userId = Guid.Parse(User.FindFirst("UserId")?.Value);
                 return userId;
             }
         }
@@ -29,10 +26,7 @@ namespace Hotel.WebApi
         {
             get
             {
-                if (instanceId == Guid.Empty)
-                {
-                    instanceId = Guid.Parse(User.FindFirst("InstanceId")?.Value);
-                }
+                if (instanceId == Guid.Empty) instanceId = Guid.Parse(User.FindFirst("InstanceId")?.Value);
                 return instanceId;
             }
         }

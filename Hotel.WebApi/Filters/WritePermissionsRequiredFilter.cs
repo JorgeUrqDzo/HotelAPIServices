@@ -11,7 +11,7 @@ namespace Hotel.WebApi.Filters
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            string role = context
+            var role = context
                 .HttpContext
                 .User
                 .FindFirst("http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
@@ -19,7 +19,7 @@ namespace Hotel.WebApi.Filters
 
             if (RolesIdentifiers.IsReadOnly(role))
             {
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+                context.HttpContext.Response.StatusCode = (int) HttpStatusCode.Forbidden;
                 context.Result = new JsonResult(new ErrorResponse(ApplicationMessages.WritePermissionsRequired));
             }
         }

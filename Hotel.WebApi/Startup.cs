@@ -1,4 +1,5 @@
 ﻿using Hotel.Data;
+using Hotel.Services;
 using Hotel.Services.Interfaces;
 using Hotel.Services.Settings;
 using Hotel.UnitOfWork;
@@ -47,22 +48,23 @@ namespace Hotel.WebApi
                 .AddSingleton(customSettings)
                 .AddSingleton(Configuration.GetSection("ConnectionStrings").Get<ConnectionSettings>())
                 .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-                .AddSingleton<JwtTokenGenerator>();
+                .AddSingleton<JwtTokenGenerator>()
+                .AddScoped<IEventLog, EventLog>()
+                .AddTransient<SecurityService>()
+                .AddTransient<UsersService>()
+                .AddTransient<IApplicationEventsService, ApplicationEventsService>()
+                .AddTransient<IApplicationSettingsService, ApplicationSettingsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
                 app.UseHsts();
-            }
-            
-            
+
+
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()

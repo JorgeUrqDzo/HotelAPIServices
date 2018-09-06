@@ -21,16 +21,16 @@ namespace Hotel.UnitOfWork
 
         public bool Any(Expression<Func<TEntity, bool>> predicate = null)
         {
-            return predicate != null ? 
-                    dbSet.Any(predicate) 
-                    : dbSet.Any();
+            return predicate != null
+                ? dbSet.Any(predicate)
+                : dbSet.Any();
         }
 
         public int Count(Expression<Func<TEntity, bool>> predicate = null)
         {
-            return predicate != null ?
-                    dbSet.Count(predicate)
-                    : dbSet.Count();
+            return predicate != null
+                ? dbSet.Count(predicate)
+                : dbSet.Count();
         }
 
         public void Delete(TEntity entity)
@@ -46,16 +46,16 @@ namespace Hotel.UnitOfWork
         public void Delete(Expression<Func<TEntity, bool>> predicate)
         {
             var entities = GetAll(predicate)
-                            .ToList();
+                .ToList();
 
             Delete(entities);
         }
 
         public IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate = null)
         {
-            return predicate != null ?
-                    dbSet.Where(predicate)
-                    : dbSet;
+            return predicate != null
+                ? dbSet.Where(predicate)
+                : dbSet;
         }
 
         public void Insert(TEntity entity)
@@ -79,123 +79,80 @@ namespace Hotel.UnitOfWork
         }
 
 
-
-
         public TEntity Find(params object[] keyValues)
         {
             return dbSet.Find(keyValues);
         }
 
-        public TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, bool disableTracking = true)
+        public TEntity GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = true)
         {
             IQueryable<TEntity> query = dbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            if (disableTracking) query = query.AsNoTracking();
 
-            if (include != null)
-            {
-                query = include(query);
-            }
+            if (include != null) query = include(query);
 
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-            {
                 return orderBy(query).FirstOrDefault();
-            }
-            else
-            {
-                return query.FirstOrDefault();
-            }
+            return query.FirstOrDefault();
         }
 
-        public TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, bool disableTracking = true)
+        public TResult GetFirstOrDefault<TResult>(Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null,
+            bool disableTracking = true)
         {
             IQueryable<TEntity> query = dbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            if (disableTracking) query = query.AsNoTracking();
 
-            if (include != null)
-            {
-                query = include(query);
-            }
+            if (include != null) query = include(query);
 
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-            {
                 return orderBy(query).Select(selector).FirstOrDefault();
-            }
-            else
-            {
-                return query.Select(selector).FirstOrDefault();
-            }
+            return query.Select(selector).FirstOrDefault();
         }
 
-        public PagedListResult<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector, Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0, int pageSize = 10000, bool disableTracking = true) where TResult : class
+        public PagedListResult<TResult> GetPagedList<TResult>(Expression<Func<TEntity, TResult>> selector,
+            Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0,
+            int pageSize = 10000, bool disableTracking = true) where TResult : class
         {
             IQueryable<TEntity> query = dbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            if (disableTracking) query = query.AsNoTracking();
 
-            if (include != null)
-            {
-                query = include(query);
-            }
+            if (include != null) query = include(query);
 
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-            {
-                return new PagedListResult<TResult>(orderBy(query).Select(selector).ToList()); //.ToPagedList(pageIndex, pageSize);
-            }
-            else
-            {
-                return new PagedListResult<TResult>(query.Select(selector).ToList()); //.ToPagedList(pageIndex, pageSize);
-            }
+                return new PagedListResult<TResult>(orderBy(query).Select(selector)
+                    .ToList()); //.ToPagedList(pageIndex, pageSize);
+            return new PagedListResult<TResult>(query.Select(selector).ToList()); //.ToPagedList(pageIndex, pageSize);
         }
 
-        public PagedListResult<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0, int pageSize = 10000, bool disableTracking = true)
+        public PagedListResult<TEntity> GetPagedList(Expression<Func<TEntity, bool>> predicate = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null, int pageIndex = 0,
+            int pageSize = 10000, bool disableTracking = true)
         {
             IQueryable<TEntity> query = dbSet;
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
+            if (disableTracking) query = query.AsNoTracking();
 
-            if (include != null)
-            {
-                query = include(query);
-            }
+            if (include != null) query = include(query);
 
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
+            if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-            {
                 return new PagedListResult<TEntity>(orderBy(query).ToList()); //.ToPagedList(pageIndex, pageSize);
-            }
-            else
-            {
-                return new PagedListResult<TEntity>(query.ToList()); //.ToPagedList(pageIndex, pageSize);
-            }
+            return new PagedListResult<TEntity>(query.ToList()); //.ToPagedList(pageIndex, pageSize);
         }
 
         public IQueryable<TEntity> FromSql(string sql, params object[] parameters)

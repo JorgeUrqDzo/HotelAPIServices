@@ -47,11 +47,11 @@ namespace Hotel.UnitOfWork
 
     public class PagedListResult<T> where T : class
     {
-        public IList<T> Items { get; set; }
-
         public PagedListResult(IList<T> items)
         {
             Items = items;
         }
+
+        public IList<T> Items { get; set; }
     }
 }

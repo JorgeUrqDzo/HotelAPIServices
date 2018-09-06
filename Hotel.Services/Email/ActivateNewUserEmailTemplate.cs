@@ -6,8 +6,8 @@ namespace Hotel.Services.Email
 {
     public class ActivateNewUserEmailTemplate : IEmailTemplate
     {
-        CustomSettings settings;
-        User user;
+        private readonly CustomSettings settings;
+        private readonly User user;
 
         public ActivateNewUserEmailTemplate(User user, CustomSettings settings)
         {
@@ -19,7 +19,7 @@ namespace Hotel.Services.Email
         {
             return new EmailMessage
             {
-                To = new List<EmailAddress>() {new EmailAddress(user.Email, $"{user.FirstName} {user.LastName}")},
+                To = new List<EmailAddress> {new EmailAddress(user.Email, $"{user.FirstName} {user.LastName}")},
                 Subject = "You have a new Hotel Api Services account",
                 Content = $@"Hi {
                         user.FirstName

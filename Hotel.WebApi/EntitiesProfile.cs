@@ -2,12 +2,7 @@
 
 namespace Hotel.WebApi
 {
-    public class EntitiesProfile: Profile
+    public class EntitiesProfile : Profile
     {
-        public EntitiesProfile()
-        {
-            
-        }
-        
     }
 }

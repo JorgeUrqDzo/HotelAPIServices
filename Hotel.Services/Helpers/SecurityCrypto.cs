@@ -10,36 +10,36 @@ namespace Hotel.Services.Helpers
     public static class SecurityCrypto
     {
         /// <summary>
-        /// Serialize and encrypt an object
+        ///     Serialize and encrypt an object
         /// </summary>
         /// <param name="pObject">Object to be encrypted</param>
         /// <param name="pPass">password to encrypt the object</param>
         /// <returns>returns the result string of the ecnrypted object</returns>
-        public static string SerializeAndEncrypt(Object pObject, string pPass)
+        public static string SerializeAndEncrypt(object pObject, string pPass)
         {
-            Stream stream = SerializeObject(pObject);
+            var stream = SerializeObject(pObject);
             return Encrypt(stream, pPass);
         }
 
         /// <summary>
-        /// Deserialize and deencrypt an object
+        ///     Deserialize and deencrypt an object
         /// </summary>
         /// <param name="pData">data to be deserialized and decrypted</param>
         /// <param name="pType">type of object to be created</param>
         /// <param name="pPass">password to decrypt the object</param>
         /// <returns>returns an object</returns>
-        public static Object DecryptAndDeseralize(string pData, Type pType, string pPass)
+        public static object DecryptAndDeseralize(string pData, Type pType, string pPass)
         {
-            string data = Decrypt(pData, pPass);
+            var data = Decrypt(pData, pPass);
             return DeserializeObject(data, pType);
         }
 
         /// <summary>
-        /// Serialize an object
+        ///     Serialize an object
         /// </summary>
         /// <param name="pObject">Object to be serialized</param>
         /// <returns>returns a stream of the serialized object</returns>
-        private static Stream SerializeObject(Object pObject)
+        private static Stream SerializeObject(object pObject)
         {
             var stream = new MemoryStream();
 
@@ -51,12 +51,12 @@ namespace Hotel.Services.Helpers
         }
 
         /// <summary>
-        /// Deserialize an Object
+        ///     Deserialize an Object
         /// </summary>
         /// <param name="pData"> data to be deserialised</param>
         /// <param name="pType"> type of object that will be created</param>
         /// <returns>created object</returns>
-        private static Object DeserializeObject(string pData, Type pType)
+        private static object DeserializeObject(string pData, Type pType)
         {
             StringReader stream = null;
             XmlTextReader reader = null;
@@ -67,7 +67,7 @@ namespace Hotel.Services.Helpers
                 stream = new StringReader(pData); // read xml data
                 reader = new XmlTextReader(stream); // create reader
                 // covert reader to object
-                return (object) serializer.Deserialize(reader);
+                return serializer.Deserialize(reader);
             }
             catch
             {
@@ -81,7 +81,7 @@ namespace Hotel.Services.Helpers
         }
 
         /// <summary>
-        /// Encrypts a stream data
+        ///     Encrypts a stream data
         /// </summary>
         /// <param name="pStream"> stream data to be encrypted</param>
         /// <param name="pPassphrase">password to encrypt the object</param>
@@ -132,7 +132,7 @@ namespace Hotel.Services.Helpers
 
 
         /// <summary>
-        /// Decrypt a string
+        ///     Decrypt a string
         /// </summary>
         /// <param name="pMessage">string to be decrypted</param>
         /// <param name="pPassphrase">Password to decrypt the object</param>
@@ -150,7 +150,7 @@ namespace Hotel.Services.Helpers
             var TDESKey = hashProvider.ComputeHash(UTF8.GetBytes(pPassphrase));
 
             // Step 2. Create a new TripleDESCryptoServiceProvider object
-            TripleDESCryptoServiceProvider tDESAlgorithm = new TripleDESCryptoServiceProvider();
+            var tDESAlgorithm = new TripleDESCryptoServiceProvider();
 
             // Step 3. Setup the decoder
             tDESAlgorithm.Key = TDESKey;

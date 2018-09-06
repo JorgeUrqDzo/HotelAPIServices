@@ -9,12 +9,12 @@ namespace Hotel.WebApi.JWTProvider
 {
     public class JwtTokenBuilder
     {
-        private SecurityKey securityKey = null;
-        private string subject = "";
-        private string issuer = "";
         private string audience = "";
-        private Dictionary<string, string> claims = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> claims = new Dictionary<string, string>();
         private int expiryInMinutes = 5;
+        private string issuer = "";
+        private SecurityKey securityKey;
+        private string subject = "";
 
         public JwtTokenBuilder AddSecurityKey(SecurityKey securityKey)
         {
@@ -42,7 +42,7 @@ namespace Hotel.WebApi.JWTProvider
 
         public JwtTokenBuilder AddClaim(string type, string value)
         {
-            this.claims.Add(type, value);
+            claims.Add(type, value);
             return this;
         }
 
@@ -64,18 +64,18 @@ namespace Hotel.WebApi.JWTProvider
 
             var claims = new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.Sub, this.subject),
+                    new Claim(JwtRegisteredClaimNames.Sub, subject),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }
                 .Union(this.claims.Select(item => new Claim(item.Key, item.Value)));
 
             var token = new JwtSecurityToken(
-                issuer: this.issuer,
-                audience: this.audience,
-                claims: claims,
+                issuer,
+                audience,
+                claims,
                 expires: DateTime.UtcNow.AddMinutes(expiryInMinutes),
                 signingCredentials: new SigningCredentials(
-                    this.securityKey,
+                    securityKey,
                     SecurityAlgorithms.HmacSha256));
 
             return new JwtToken(token);
@@ -85,16 +85,16 @@ namespace Hotel.WebApi.JWTProvider
 
         private void EnsureArguments()
         {
-            if (this.securityKey == null)
+            if (securityKey == null)
                 throw new ArgumentNullException("Security Key");
 
-            if (string.IsNullOrEmpty(this.subject))
+            if (string.IsNullOrEmpty(subject))
                 throw new ArgumentNullException("Subject");
 
-            if (string.IsNullOrEmpty(this.issuer))
+            if (string.IsNullOrEmpty(issuer))
                 throw new ArgumentNullException("Issuer");
 
-            if (string.IsNullOrEmpty(this.audience))
+            if (string.IsNullOrEmpty(audience))
                 throw new ArgumentNullException("Audience");
         }
 

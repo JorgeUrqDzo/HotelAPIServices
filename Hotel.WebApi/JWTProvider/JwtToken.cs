@@ -5,7 +5,7 @@ namespace Hotel.WebApi.JWTProvider
 {
     public sealed class JwtToken
     {
-        private JwtSecurityToken token;
+        private readonly JwtSecurityToken token;
 
         internal JwtToken(JwtSecurityToken token)
         {
@@ -13,6 +13,6 @@ namespace Hotel.WebApi.JWTProvider
         }
 
         public DateTime ValidTo => token.ValidTo;
-        public string Value => new JwtSecurityTokenHandler().WriteToken(this.token);
+        public string Value => new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

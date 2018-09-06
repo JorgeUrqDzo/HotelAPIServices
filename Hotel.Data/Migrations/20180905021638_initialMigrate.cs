@@ -8,8 +8,8 @@ namespace Hotel.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Roles",
-                columns: table => new
+                "Roles",
+                table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
@@ -17,14 +17,11 @@ namespace Hotel.Data.Migrations
                     Identifier = table.Column<string>(maxLength: 25, nullable: false),
                     Order = table.Column<int>(nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Roles", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Roles", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
+                "Users",
+                table => new
                 {
                     CreatedBy = table.Column<Guid>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
@@ -52,48 +49,48 @@ namespace Hotel.Data.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Users_CreatedBy",
-                        column: x => x.CreatedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        "FK_Users_Users_CreatedBy",
+                        x => x.CreatedBy,
+                        "Users",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Users_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
+                        "FK_Users_Roles_RoleId",
+                        x => x.RoleId,
+                        "Roles",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Users_Users_UpdatedBy",
-                        column: x => x.UpdatedBy,
-                        principalTable: "Users",
-                        principalColumn: "Id",
+                        "FK_Users_Users_UpdatedBy",
+                        x => x.UpdatedBy,
+                        "Users",
+                        "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CreatedBy",
-                table: "Users",
-                column: "CreatedBy");
+                "IX_Users_CreatedBy",
+                "Users",
+                "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
-                column: "RoleId");
+                "IX_Users_RoleId",
+                "Users",
+                "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_UpdatedBy",
-                table: "Users",
-                column: "UpdatedBy");
+                "IX_Users_UpdatedBy",
+                "Users",
+                "UpdatedBy");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Users");
+                "Users");
 
             migrationBuilder.DropTable(
-                name: "Roles");
+                "Roles");
         }
     }
 }

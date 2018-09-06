@@ -22,10 +22,7 @@ namespace Hotel.WebApi.Filters
 
             var controller = GetController(endpoint);
 
-            if (!service.HasPermission(controller))
-            {
-                context.HttpContext.Response.StatusCode = 401;
-            }
+            if (!service.HasPermission(controller)) context.HttpContext.Response.StatusCode = 401;
         }
 
         private string GetController(string endPoint)

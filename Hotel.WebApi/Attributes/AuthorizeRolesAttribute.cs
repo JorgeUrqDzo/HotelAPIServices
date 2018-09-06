@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Hotel.WebApi.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
     public class AuthorizeRolesAttribute : AuthorizeAttribute
     {
         public AuthorizeRolesAttribute(params object[] roles)
         {
-            this.Roles = string.Join(",", roles);
+            Roles = string.Join(",", roles);
         }
     }
 }

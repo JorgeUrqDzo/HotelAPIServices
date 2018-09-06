@@ -10,12 +10,13 @@ namespace Hotel.WebApi.Filters
     {
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if(context.HttpContext.Request.Headers.TryGetValue("Authorization", out var encodedToken)
-               && string.IsNullOrWhiteSpace(encodedToken) == false)
+            if (context.HttpContext.Request.Headers.TryGetValue("Authorization", out var encodedToken)
+                && string.IsNullOrWhiteSpace(encodedToken) == false)
             {
                 var tokenGenerator = context.HttpContext.RequestServices.GetService<JwtTokenGenerator>();
 
-                var token = new JwtSecurityToken(encodedToken.ToString().Replace("bearer ", "", StringComparison.CurrentCultureIgnoreCase));
+                var token = new JwtSecurityToken(encodedToken.ToString()
+                    .Replace("bearer ", "", StringComparison.CurrentCultureIgnoreCase));
 
                 var updatedToken = tokenGenerator.RefreshSecurityToken(token);
 

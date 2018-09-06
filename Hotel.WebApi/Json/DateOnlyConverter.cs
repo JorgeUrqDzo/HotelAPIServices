@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Newtonsoft.Json;
 
 namespace Hotel.WebApi.Json
@@ -15,22 +16,19 @@ namespace Hotel.WebApi.Json
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            if ((reader.Value == null || reader.Value.ToString() == "") && objectType == typeof(DateTime?))
-            {
-                return null;
-            }
+            if ((reader.Value == null || reader.Value.ToString() == "") && objectType == typeof(DateTime?)) return null;
 
             var date = reader.Value is DateTime
                 ? (DateTime) reader.Value
-                : DateTime.ParseExact((reader.Value as string), SupportedFormats, null,
-                    System.Globalization.DateTimeStyles.None);
+                : DateTime.ParseExact(reader.Value as string, SupportedFormats, null,
+                    DateTimeStyles.None);
 
             return date.Date;
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            DateTime d = (DateTime) value;
+            var d = (DateTime) value;
             writer.WriteValue(d.ToString("yyyy-MM-ddT00:00:00"));
         }
     }

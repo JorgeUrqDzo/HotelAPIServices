@@ -4,8 +4,6 @@ namespace Hotel.Services.Exceptions
 {
     public class UnauthorizedException : Exception
     {
-        public string ErrorCode { get; set; }
-
         public UnauthorizedException(string message)
             : base(message)
         {
@@ -16,5 +14,7 @@ namespace Hotel.Services.Exceptions
         {
             ErrorCode = errorCode;
         }
+
+        public string ErrorCode { get; set; }
     }
 }

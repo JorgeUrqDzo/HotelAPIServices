@@ -10,14 +10,15 @@ namespace Hotel.WebApi.JWTProvider
 {
     public class JwtTokenGenerator
     {
-        private CustomSettings Settings { get; set; }
-        private int ExpirationInMinutes;
+        private readonly int ExpirationInMinutes;
 
         public JwtTokenGenerator(CustomSettings settings)
         {
             ExpirationInMinutes = settings.TokenExpiration;
             Settings = settings;
         }
+
+        private CustomSettings Settings { get; }
 
         public JwtToken GenerateSecurityToken(User user, Guid? instanceOverride = null)
         {
